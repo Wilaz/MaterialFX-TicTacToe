@@ -1,0 +1,19 @@
+{
+    "files.exclude": {
+        // Gradle files
+        ".gradle": true,
+        "gradle": true,
+        "gradle.properties": true,
+        "gradlew": true,
+        "gradlew.bat": true,
+        "app/build": true,
+
+        // Git files
+        ".gitattributes": true,
+        ".gitignore": true,
+
+        // Vscode
+        ".vscode": true,
+    },
+    "java.configuration.updateBuildConfiguration": "automatic"
+}
