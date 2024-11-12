@@ -22,5 +22,5 @@ java {
 }
 
 application {
-    mainClass = "tictactoe.app"
+    mainClass = "tictactoe.TicTacToe"
 }
