@@ -1,7 +1,5 @@
 package tictactoe;
 
-import java.util.Arrays;
-
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,20 +9,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 public class GameController {
-    private char player = 'X';
-    private char[][] game = {{'-','-','-'},{'-','-','-'},{'-','-','-'}};
-    private int[][][] wins = {
-        {{0,0},{1,0},{2,0}}, // Columns
-        {{0,1},{1,1},{2,1}},
-        {{0,2},{1,2},{2,2}},
-        {{0,0},{0,1},{0,2}}, // Rows
-        {{1,0},{1,1},{1,2}},
-        {{2,0},{2,1},{2,2}},
-        {{0,0},{1,1},{2,2}}, // Diagonals
-        {{0,2},{1,1},{2,0}}
-    };
-    private boolean win = true;
-    private boolean won = false;
+    private char player     = 'X';
+    private boolean win     = true;
+    private boolean won     = false;
+    private int moves       = 0;
+    private char[][] game   = {{'-','-','-'},{'-','-','-'},{'-','-','-'}};
+
 
     @FXML private Label     turnLabel;
     @FXML private GridPane  grid;
@@ -35,19 +25,24 @@ public class GameController {
         if (button.getText().equals("") && !won) {
 
             Node source = (Node) event.getSource();
-
             Integer x   = GridPane.getColumnIndex(source);
             Integer y   = GridPane.getRowIndex(source) - 1;
 
+            moves++;
             game[x][y]  = player;
             button.setText(String.valueOf(player));
             checkWin(x, y, player);
 
             if (!won) {
-                swap();
-                turnLabel.setText(String.valueOf(player) + "'s turn");
+                if (moves >= 9) {
+                    tie();
+                } else {
+                    swap();
+                    turnLabel.setText(String.valueOf(player) + "'s turn");
+                }
             }
-
+        } else if (won) {
+            reset();
         }
     }
 
@@ -59,9 +54,24 @@ public class GameController {
         }
     }
 
+    private void reset() {
+        player  = 'X';
+        win     = true;
+        won     = false;
+        moves   = 0;
+        game    = new char[][] {{'-','-','-'},{'-','-','-'},{'-','-','-'}};
+
+        turnLabel.setText(String.valueOf(player) + "'s turn");
+        for (int[] tile : Constants.spots) {
+            MFXButton e = (MFXButton) getNodeByRowColumnIndex(tile[0], tile[1] + 1, grid);
+            e.setId("custom");
+            e.setText("");
+        }
+    }
+
     private void checkWin(int x, int y, char player) {
 
-        for (int[][] rows : wins) {
+        for (int[][] rows : Constants.wins) {
             win = true;
             for (int[] column : rows) {
                 if (game[column[0]][column[1]] != player) {
@@ -85,12 +95,22 @@ public class GameController {
         }
     }
 
+    private void tie() {
+        won = true;
+        turnLabel.setText("Tie!");
+
+        for (int[] tile : Constants.tie) {
+            MFXButton button = (MFXButton) getNodeByRowColumnIndex(tile[0], tile[1] + 1, grid);
+            button.setId("win");
+        }
+    }
+
     public Node getNodeByRowColumnIndex (final int row, final int column, GridPane gridPane) {
         Node result = null;
         ObservableList<Node> childrens = gridPane.getChildren();
 
         for (Node node : childrens) {
-            if(gridPane.getRowIndex(node) == column && gridPane.getColumnIndex(node) == row) {
+            if(GridPane.getRowIndex(node) == column && GridPane.getColumnIndex(node) == row) {
                 result = node;
                 break;
             }

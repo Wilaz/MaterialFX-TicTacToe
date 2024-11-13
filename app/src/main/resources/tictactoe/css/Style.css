@@ -1,0 +1,31 @@
+@import url(https://fonts.googleapis.com/css2?family=Nunito:wght@400..700&display=swap);
+@import 'MFXColors.css';
+
+.root {
+	-fx-font-family: 'Nunito';
+	-fx-font-size: 1em;
+}
+
+.header-label {
+	-fx-font-weight: 700;
+	-fx-text-fill: -mfx-text-he;
+}
+
+.mfx-button {
+	-fx-font-weight: 400;
+	-fx-text-fill: white;
+	-fx-background-radius: 8%;
+}
+
+.mfx-button .mfx-ripple-generator {
+	-mfx-ripple-radius: 40;
+	-mfx-auto-clip: true;
+}
+
+#custom {
+	-fx-background-color: -mfx-charcoal;
+}
+
+#win {
+	-fx-background-color: -mfx-red;
+}
